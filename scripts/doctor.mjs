@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Preflight environment check — runs automatically before `pnpm dev`.
-// Surfaces every common starter-kit setup gotcha *before* uvicorn or
-// next try to start, with actionable error messages.
+// Surfaces every common local setup gotcha *before* uvicorn or next try
+// to start, with actionable error messages.
 //
 // Zero dependencies (uses only node:* core modules) so this works on a
 // fresh clone before anyone has run `pnpm install`.

@@ -10,7 +10,7 @@ from app.types.archive import (
     TranscriptionJob,
     Word,
 )
-from app.types.files import FileMetadata, FileMetadataDetail
+from app.types.files import FileMetadata
 from app.types.stats import DailyUploadCount, UploadStats
 from app.types.upload import FileUploadResponse
 
@@ -19,7 +19,6 @@ __all__ = [
     "ArchiveStats",
     "DailyUploadCount",
     "FileMetadata",
-    "FileMetadataDetail",
     "FileUploadResponse",
     "JobStatus",
     "SearchHit",

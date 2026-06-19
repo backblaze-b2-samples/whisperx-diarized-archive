@@ -131,5 +131,4 @@ def process_upload(
         content_type=content_type,
         uploaded_at=result.uploaded_at,
         url=result.url,
-        metadata=None,
     )

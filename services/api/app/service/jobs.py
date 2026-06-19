@@ -4,7 +4,7 @@ EPHEMERAL by design: this tracks *live* progress (queued -> transcribing ->
 diarizing -> embedding -> writing -> done/error) for the UI. It resets on
 restart and is not shared across workers. The authoritative answer to "is
 this file transcribed?" is the existence of its transcripts/{key}.json
-artifact in B2 (see service/transcription.py and service/stats.py), never
+artifact in B2 (see service/transcription.py and service/archive.py), never
 this registry.
 
 Thread-safe so a FastAPI BackgroundTask thread can update progress while the

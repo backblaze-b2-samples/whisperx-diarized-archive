@@ -132,9 +132,9 @@ def get_file(key: str) -> FileMetadata:
 def get_preview_url(key: str) -> str:
     """Return a presigned URL without recording a download.
 
-    Used by the preview modal for rendering images / PDFs inline — opening
-    a preview is not a user-initiated download and shouldn't inflate the
-    download counter.
+    Used by the preview modal to stream audio / video media inline —
+    opening a preview is not a user-initiated download and shouldn't
+    inflate the download counter.
     """
     validate_key(key)
     metadata = get_file_metadata(key)

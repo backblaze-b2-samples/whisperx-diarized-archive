@@ -2,8 +2,6 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from app.types.files import FileMetadataDetail
-
 
 class FileUploadResponse(BaseModel):
     key: str
@@ -13,4 +11,3 @@ class FileUploadResponse(BaseModel):
     content_type: str
     uploaded_at: datetime
     url: str | None = None
-    metadata: FileMetadataDetail | None = None

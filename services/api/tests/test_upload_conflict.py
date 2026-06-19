@@ -17,7 +17,6 @@ def test_upload_allows_duplicate_filename(monkeypatch):
             content_type=content_type,
             uploaded_at="2026-02-14T00:00:00Z",
             url=None,
-            metadata=None,
         ),
     )
 
@@ -43,7 +42,6 @@ def test_upload_uses_original_filename(monkeypatch):
             content_type=content_type,
             uploaded_at="2026-02-14T00:00:00Z",
             url=None,
-            metadata=None,
         ),
     )
 

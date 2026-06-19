@@ -80,7 +80,7 @@ Open `.env` and fill in, from the [Backblaze B2 dashboard](https://secure.backbl
 1. **Create a bucket** → paste its name into `B2_BUCKET_NAME`. Set `B2_REGION` to your bucket's region (e.g. `us-west-004`); the S3 endpoint is derived from it.
 2. **Create an application key** with `Read and Write` permission → `B2_APPLICATION_KEY_ID` and `B2_APPLICATION_KEY` (the key is shown once).
 
-> Walkthroughs: [creating a bucket](https://www.backblaze.com/docs/cloud-storage-create-and-manage-buckets) and [creating app keys](https://www.backblaze.com/docs/cloud-storage-create-and-manage-app-keys).
+> Walkthroughs: [creating a bucket](https://www.backblaze.com/docs/cloud-storage-create-and-manage-buckets?utm_source=github&utm_medium=referral&utm_campaign=ai_artifacts&utm_content=whisperx-diarized-archive) and [creating app keys](https://www.backblaze.com/docs/cloud-storage-create-and-manage-app-keys?utm_source=github&utm_medium=referral&utm_campaign=ai_artifacts&utm_content=whisperx-diarized-archive).
 
 **4. (Optional) Enable speaker diarization**
 

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -26,8 +25,10 @@ export function FilePreview({ file, open, onOpenChange }: FilePreviewProps) {
 
   if (!file) return null;
 
-  const isImage = file.content_type.startsWith("image/");
-  const isPdf = file.content_type === "application/pdf";
+  // This archive ingests audio/video media, so the bucket-explorer preview
+  // plays the media inline rather than rendering images or PDFs.
+  const isAudio = file.content_type.startsWith("audio/");
+  const isVideo = file.content_type.startsWith("video/");
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -39,26 +40,20 @@ export function FilePreview({ file, open, onOpenChange }: FilePreviewProps) {
           <div className="flex items-center justify-center rounded-lg border bg-muted/30 min-h-[200px]">
             {isLoading ? (
               <Skeleton className="h-48 w-full" />
-            ) : isImage && previewUrl ? (
-              <div className="relative w-full h-[400px]">
-                {/* `unoptimized` because presigned URLs carry their own
-                    short-lived expiry and we don't want Next's image
-                    optimizer caching them past that window. */}
-                <Image
-                  src={previewUrl}
-                  alt={file.filename}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 600px"
-                  className="object-contain rounded"
-                  unoptimized
-                />
-              </div>
-            ) : isPdf && previewUrl ? (
-              <iframe
+            ) : isAudio && previewUrl ? (
+              // Presigned URLs carry their own short-lived expiry; the
+              // browser streams directly from B2 for the duration.
+              <audio controls src={previewUrl} className="w-full px-4">
+                Your browser does not support the audio element.
+              </audio>
+            ) : isVideo && previewUrl ? (
+              <video
+                controls
                 src={previewUrl}
-                className="w-full h-[400px] rounded"
-                title={file.filename}
-              />
+                className="w-full h-[400px] rounded bg-black"
+              >
+                Your browser does not support the video element.
+              </video>
             ) : (
               <div className="text-center text-muted-foreground p-8">
                 <p className="text-sm">Preview not available</p>
