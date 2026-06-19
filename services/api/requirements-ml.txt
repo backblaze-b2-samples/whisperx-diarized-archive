@@ -1,0 +1,24 @@
+# Heavy local ML stack for the transcription / diarization / embedding engine.
+#
+# These are intentionally SEPARATE from requirements.txt: the API boots and
+# `pnpm test:api` / `pnpm check:structure` pass WITHOUT this file installed,
+# because everything here is lazy-imported inside app/service/engine/ only at
+# the moment a transcription job actually runs.
+#
+# Install when you want to run the pipeline:
+#   cd services/api && source .venv/bin/activate
+#   pip install -r requirements-ml.txt
+#
+# System dependency: ffmpeg must be on PATH (audio/video decoding).
+#   macOS:  brew install ffmpeg
+#   Debian: sudo apt-get install ffmpeg
+#
+# GPU note: CPU works for short clips with the `base` model + int8 compute.
+# For real throughput install CUDA-enabled torch and set WHISPERX_DEVICE=cuda.
+
+whisperx>=3.1.1
+faster-whisper>=1.0.0
+pyannote.audio>=3.1.0
+sentence-transformers>=3.0.0
+torch>=2.0.0
+torchaudio>=2.0.0
