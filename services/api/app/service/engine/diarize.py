@@ -16,6 +16,7 @@ import os
 import tempfile
 
 from app.config import settings
+from app.service.engine._torch_safe import allowlist_pyannote_globals
 from app.service.engine.errors import MissingMLDependencies
 
 logger = logging.getLogger(__name__)
@@ -55,10 +56,15 @@ def diarize_words(media_bytes: bytes, segments: list[dict], suffix: str = "") ->
     except ImportError as e:
         raise MissingMLDependencies("Diarization") from e
 
+    allowlist_pyannote_globals()
+
     path = _write_temp(media_bytes, suffix)
     try:
         pipeline = DiarizationPipeline(
             model_name=settings.diarization_model,
+            # whisperx 3.7.x's DiarizationPipeline takes `use_auth_token=`
+            # (3.8.x took `token=`). We pin to 3.7.x in requirements-ml.txt to
+            # avoid pyannote.audio 4.x pulling the gated community-1 PLDA weight.
             use_auth_token=settings.hf_token,
             device=settings.whisperx_device,
         )

@@ -14,6 +14,7 @@ import os
 import tempfile
 
 from app.config import settings
+from app.service.engine._torch_safe import allowlist_pyannote_globals
 from app.service.engine.errors import MissingMLDependencies
 
 logger = logging.getLogger(__name__)
@@ -53,6 +54,11 @@ def transcribe_bytes(media_bytes: bytes, suffix: str = "") -> dict:
             device,
             compute_type,
         )
+        # whisperx.load_model eagerly loads a pyannote VAD checkpoint via
+        # torch.load; under torch 2.6+ that needs the safe-globals allowlist.
+        # Applied here (transcription always runs first) so it also covers the
+        # later DiarizationPipeline load — add_safe_globals is process-global.
+        allowlist_pyannote_globals()
         model = whisperx.load_model(
             settings.whisperx_model,
             device,

@@ -23,9 +23,20 @@
 # GPU note: CPU works for short clips with the `base` model + int8 compute.
 # For real throughput install CUDA-enabled torch and set WHISPERX_DEVICE=cuda.
 
-whisperx>=3.1.1
+# Pinned to the 3.7 line on purpose. whisperx 3.8.x hard-requires
+# `pyannote-audio>=4.0.0`, and EVERY pyannote.audio 4.0.x defaults the
+# speaker-diarization-3.1 pipeline's PLDA weight to the separately-gated repo
+# `pyannote/speaker-diarization-community-1`, which 403s unless that repo's
+# terms are also accepted — breaking diarization for the already-accepted
+# 3.1 + segmentation-3.0 gates. whisperx 3.7.x instead declares
+# `pyannote-audio<4.0.0,>=3.3.2`, so the 3.1 pipeline loads ONLY from the
+# accepted repos (no community-1 fetch). The trade-off: 3.7.x's
+# DiarizationPipeline takes `use_auth_token=` (3.8.x took `token=`) — keep this
+# pin and the `use_auth_token=` kwarg in app/service/engine/diarize.py
+# consistent. Pin pyannote.audio tightly to the 3.x line that avoids community-1.
+whisperx>=3.7,<3.8
 faster-whisper>=1.0.0
-pyannote.audio>=3.1.0
+pyannote.audio>=3.3.2,<4
 sentence-transformers>=3.0.0
 torch>=2.0.0
 torchaudio>=2.0.0
