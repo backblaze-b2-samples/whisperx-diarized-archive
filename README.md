@@ -66,6 +66,10 @@ The API boots and tests run with just the base stack. Install the heavy ML stack
 cd services/api && source .venv/bin/activate
 pip install -r requirements-ml.txt     # whisperx, pyannote, torch, sentence-transformers
 # system dep: ffmpeg must be on PATH (macOS: `brew install ffmpeg`)
+# Any current ffmpeg works. torchcodec (a transitive dep) only ships dylibs for
+# ffmpeg 4-7; on ffmpeg 8+ it fails to load, but the engine treats it as optional
+# (it's only used for audio/video embedding inputs, which this app never sends),
+# so you'll see a one-line "torchcodec unavailable" log and transcription proceeds.
 cd ../..
 ```
 

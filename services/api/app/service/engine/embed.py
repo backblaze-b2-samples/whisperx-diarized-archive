@@ -10,6 +10,7 @@ reload weights. Heavy imports stay inside the functions.
 
 import functools
 import logging
+import sys
 
 from app.config import settings
 from app.service.engine.errors import MissingMLDependencies
@@ -17,8 +18,38 @@ from app.service.engine.errors import MissingMLDependencies
 logger = logging.getLogger(__name__)
 
 
+def _ensure_torchcodec_optional() -> None:
+    """Make torchcodec a no-op import if its native libs can't load.
+
+    sentence-transformers >=5 eagerly imports torchcodec for optional audio/video
+    embedding inputs. torchcodec's prebuilt dylibs are linked against ffmpeg 4-7
+    (libavutil.56-59); on a host with ffmpeg 8 (libavutil.60) the load raises
+    *RuntimeError*. sentence-transformers guards that import with
+    ``except (ImportError, OSError)`` — which does NOT catch RuntimeError — so a
+    pure-text model load crashes even though every torchcodec consumer there is
+    behind an ``is not None`` check.
+
+    We embed text only, never audio/video, so torchcodec is genuinely optional.
+    Probe it once; if it can't load for any reason, mask the module so the
+    library's own optional-import fallback (AudioDecoder/VideoDecoder = None) is
+    taken. ``sys.modules[name] = None`` makes Python raise ImportError on any
+    ``import torchcodec...`` — the exact path the library already handles.
+    """
+    if "torchcodec" in sys.modules:
+        return
+    try:
+        import torchcodec.decoders  # noqa: F401
+    except Exception:  # ImportError, OSError, RuntimeError (bad ffmpeg ABI), ...
+        logger.warning(
+            "torchcodec unavailable (likely an ffmpeg ABI mismatch); disabling "
+            "its optional audio/video import so text embedding can proceed."
+        )
+        sys.modules["torchcodec"] = None  # type: ignore[assignment]
+
+
 @functools.lru_cache(maxsize=2)
 def _load_model(model_name: str):
+    _ensure_torchcodec_optional()
     try:
         from sentence_transformers import SentenceTransformer  # type: ignore
     except ImportError as e:

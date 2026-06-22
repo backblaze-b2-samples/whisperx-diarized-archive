@@ -13,6 +13,13 @@
 #   macOS:  brew install ffmpeg
 #   Debian: sudo apt-get install ffmpeg
 #
+# Any current ffmpeg works — no version pin needed here. torchcodec (pulled in
+# transitively by whisperx/pyannote) only ships prebuilt dylibs for ffmpeg 4-7
+# and raises RuntimeError on ffmpeg 8+; the embed engine treats torchcodec as
+# optional (text embedding never decodes audio) and degrades gracefully, so we
+# deliberately avoid a brittle torch/torchaudio/torchcodec/ffmpeg version lock.
+# See app/service/engine/embed.py::_ensure_torchcodec_optional.
+#
 # GPU note: CPU works for short clips with the `base` model + int8 compute.
 # For real throughput install CUDA-enabled torch and set WHISPERX_DEVICE=cuda.
 
