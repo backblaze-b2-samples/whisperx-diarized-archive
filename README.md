@@ -7,6 +7,28 @@ Source media lands in B2 first. A local pipeline then transcribes each file with
 
 Built for **podcast producers, compliance teams, and content researchers** who want their recordings to become a queryable knowledge base — not just files in a bucket.
 
+## What it looks like
+
+**Dashboard** — archive metrics (files transcribed, speakers, segments, hours, storage) over a list of recent transcriptions.
+
+![Dashboard with archive metrics and recent transcriptions](docs/images/dashboard.png)
+
+**Library** — the `media/`-scoped media browser, each file tagged Diarized or Transcribe-only with a per-row View transcript action.
+
+![Library listing media files with diarized and transcribe-only status badges](docs/images/library.png)
+
+**Transcript** — a speaker-attributed, timestamped transcript for a single recording opened from the Library.
+
+![Speaker-labeled timestamped transcript of a recording](docs/images/transcript.png)
+
+**Search** — keyword or semantic search across the whole archive, with matches grouped by source file and linked back to the speaker-attributed transcript.
+
+![Semantic search results grouped by source recording](docs/images/search.png)
+
+**Upload** — drag-and-drop on-ramp that writes source audio/video straight to the B2 `media/` prefix.
+
+![Upload page with a drag-and-drop dropzone](docs/images/upload.png)
+
 ## Why B2
 
 This sample is a **write-amplification** story: one uploaded media file fans out into dense, continuously-accumulating transcript / segment / embedding artifacts across a growing archive — all on B2 via the **S3-compatible API**, with a custom user-agent and standard `B2_*` env vars. There is no application database; B2 is the sole data store, and the existence of a `transcripts/{key}.json` object is the authoritative "is this transcribed?" signal.
